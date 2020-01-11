@@ -31,14 +31,15 @@ RUN curl -L "https://github.com/docker/compose/releases/download/${COMPOSE_VERSI
 RUN chmod +x /usr/local/bin/docker-compose; ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 
 # Install Azure DevOps agent
-RUN mkdir /azagent; chown -R ${USER} /azagent 
-USER ${USER}
+RUN mkdir /azagent 
 WORKDIR /azagent
+COPY init.sh .
+RUN chmod +x ./init.sh
+RUN chown -R ${USER} /azagent
+USER ${USER}
 
 RUN curl -fkSL -o vstsagent.tar.gz https://vstsagentpackage.azureedge.net/agent/${AGENT_VERSION}/vsts-agent-linux-x64-${AGENT_VERSION}.tar.gz; `
     tar -zxvf vstsagent.tar.gz;
 
-COPY init.sh .
-RUN chmod +x ./init.sh
 
 ENTRYPOINT ["./init.sh"]
