@@ -37,5 +37,6 @@ RUN curl -fkSL -o vstsagent.tar.gz https://vstsagentpackage.azureedge.net/agent/
     tar -zxvf vstsagent.tar.gz;
 
 COPY init.sh .
+RUN chmod +x ./init.sh
 
 ENTRYPOINT ["./init.sh"]
