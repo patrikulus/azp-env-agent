@@ -1,3 +1,4 @@
+#!/bin/bash
 ./config.sh --environment \
     --environmentname $ENVIRONMENT_NAME \
     --acceptteeeula \
