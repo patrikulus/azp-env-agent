@@ -3,6 +3,7 @@ FROM ubuntu:bionic
 
 ARG AGENT_VERSION=2.163.1
 ARG COMPOSE_VERSION=1.25.0
+ARG USER=1000:1000
 
 ENV WORKDIR="_work"
 
@@ -30,7 +31,8 @@ RUN curl -L "https://github.com/docker/compose/releases/download/${COMPOSE_VERSI
 RUN chmod +x /usr/local/bin/docker-compose; ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 
 # Install Azure DevOps agent
-RUN mkdir /azagent
+RUN mkdir /azagent; chown -R ${USER} /azagent 
+USER ${USER}
 WORKDIR /azagent
 
 RUN curl -fkSL -o vstsagent.tar.gz https://vstsagentpackage.azureedge.net/agent/${AGENT_VERSION}/vsts-agent-linux-x64-${AGENT_VERSION}.tar.gz; `
