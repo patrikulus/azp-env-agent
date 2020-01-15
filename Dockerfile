@@ -5,7 +5,7 @@ ARG AGENT_VERSION=2.163.1
 ARG COMPOSE_VERSION=1.25.0
 ARG UID=1000
 ARG GID=1000
-ARG USERNAME=az-agent-user
+ARG USER=az-agent-user
 
 ENV WORKDIR="_work"
 
@@ -33,16 +33,17 @@ RUN curl -L "https://github.com/docker/compose/releases/download/${COMPOSE_VERSI
 RUN chmod +x /usr/local/bin/docker-compose; ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 
 # Create service user
-RUN useradd -u ${UID} -g ${GID} ${USERNAME}
-RUN usermod -aG docker ${USERNAME}
+RUN groupadd -g ${GID} ${USER}; `
+    useradd -u ${UID} -g ${GID} ${USER}; `
+    usermod -aG docker ${USER}
 
 # Install Azure DevOps agent
 RUN mkdir /azagent 
 WORKDIR /azagent
 COPY init.sh .
 RUN chmod +x ./init.sh
-RUN chown -R ${USERNAME} /azagent
-USER ${USERNAME}
+RUN chown -R ${USER} /azagent
+USER ${USER}
 
 RUN curl -fkSL -o vstsagent.tar.gz https://vstsagentpackage.azureedge.net/agent/${AGENT_VERSION}/vsts-agent-linux-x64-${AGENT_VERSION}.tar.gz; `
     tar -zxvf vstsagent.tar.gz;
