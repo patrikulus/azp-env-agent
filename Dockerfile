@@ -34,10 +34,8 @@ RUN curl -L "https://github.com/docker/compose/releases/download/${COMPOSE_VERSI
 RUN chmod +x /usr/local/bin/docker-compose; ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 
 # Create service user
-RUN groupadd -g ${GID} ${USER}; `
-    groupadd -g ${DOCKER_GID} docker; `
-    useradd -u ${UID} -g ${GID} ${USER}; `
-    usermod -aG docker ${USER}
+RUN groupadd -g ${DOCKER_GID} docker; `
+    useradd -u ${UID} -g ${DOCKER_GID} ${USER}
 
 # Install Azure DevOps agent
 RUN mkdir /azagent 
