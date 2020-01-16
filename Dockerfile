@@ -5,6 +5,7 @@ ARG AGENT_VERSION=2.163.1
 ARG COMPOSE_VERSION=1.25.0
 ARG UID=1000
 ARG GID=1000
+ARG DOCKER_GID=999
 ARG USER=az-agent-user
 
 ENV WORKDIR="_work"
@@ -34,6 +35,7 @@ RUN chmod +x /usr/local/bin/docker-compose; ln -s /usr/local/bin/docker-compose 
 
 # Create service user
 RUN groupadd -g ${GID} ${USER}; `
+    groupadd -g ${DOCKER_GID} docker; `
     useradd -u ${UID} -g ${GID} ${USER}; `
     usermod -aG docker ${USER}
 
