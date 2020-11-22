@@ -1,16 +1,13 @@
 #escape=`
-FROM ubuntu:bionic
+FROM ubuntu:20.04
 
 ARG AGENT_VERSION=2.177.1
 ARG COMPOSE_VERSION=1.27.4
-ARG UID=1000
-ARG GID=1000
-ARG DOCKER_GID=999
-ARG USER=az-agent-user
 
 ENV WORKDIR="_work"
+ENV AGENT_ALLOW_RUNASROOT="1"
 
-# Install docker
+# Install docker-cli
 RUN apt-get update; ` 
     apt-get install -y `
     apt-transport-https `
@@ -27,26 +24,19 @@ RUN add-apt-repository `
    stable"
 
 RUN apt-get update; `
-    apt-get install -y docker-ce docker-ce-cli containerd.io
+    apt-get install -y docker-ce-cli
 
 # Install docker-compose
 RUN curl -L "https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 RUN chmod +x /usr/local/bin/docker-compose; ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
-
-# Create service user
-RUN groupadd -g ${DOCKER_GID} docker; `
-    useradd -u ${UID} -g ${DOCKER_GID} ${USER}
 
 # Install Azure DevOps agent
 RUN mkdir /azagent 
 WORKDIR /azagent
 COPY init.sh .
 RUN chmod +x ./init.sh
-RUN chown -R ${USER} /azagent
-USER ${USER}
 
 RUN curl -fkSL -o vstsagent.tar.gz https://vstsagentpackage.azureedge.net/agent/${AGENT_VERSION}/vsts-agent-linux-x64-${AGENT_VERSION}.tar.gz; `
     tar -zxvf vstsagent.tar.gz;
-
 
 ENTRYPOINT ["./init.sh"]
