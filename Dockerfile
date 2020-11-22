@@ -31,7 +31,7 @@ RUN curl -L "https://github.com/docker/compose/releases/download/${COMPOSE_VERSI
 RUN chmod +x /usr/local/bin/docker-compose; ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 
 # Install Azure DevOps agent
-RUN mkdir /azagent 
+RUN mkdir /azagent && chmod -R 755 /azagent
 WORKDIR /azagent
 COPY init.sh .
 RUN chmod +x ./init.sh
