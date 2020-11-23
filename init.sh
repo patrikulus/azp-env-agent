@@ -7,6 +7,7 @@
     --work $WORKDIR \
     --projectname $PROJECT_NAME \
     --auth PAT \
-    --token $AUTH_TOKEN;
+    --token $AUTH_TOKEN \
+    --replace;
     
 ./run.sh
