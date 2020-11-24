@@ -1,6 +1,7 @@
 #escape=`
 FROM ubuntu:20.04
 
+ARG DEBIAN_FRONTEND=noninteractive
 ARG AGENT_VERSION=2.177.1
 ARG COMPOSE_VERSION=1.27.4
 
